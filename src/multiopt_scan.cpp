@@ -852,6 +852,8 @@ void MultiOptScan::print_status()
             << " (" << filter_fractions[KEPT] << ")" << std::endl;
   std::cout << "  Rejected due to min_R0:            " << std::setw(width) << filters[REJECTED_DUE_TO_R0]
             << " (" << filter_fractions[REJECTED_DUE_TO_R0] << ")" << std::endl;
+  std::cout << "  Rejected due to max_R0:            " << std::setw(width) << filters[REJECTED_DUE_TO_R0_MAX]
+            << " (" << filter_fractions[REJECTED_DUE_TO_R0_MAX] << ")" << std::endl;
   std::cout << "  Rejected due to min iota:          " << std::setw(width) << filters[REJECTED_DUE_TO_IOTA]
             << " (" << filter_fractions[REJECTED_DUE_TO_IOTA] << ")" << std::endl;
   std::cout << "  Rejected due to max elongation:    " << std::setw(width) << filters[REJECTED_DUE_TO_ELONGATION]
