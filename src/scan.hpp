@@ -12,17 +12,21 @@
 #define MPI_QSCFLOAT MPI_DOUBLE
 #endif
 
-namespace qsc {
+namespace qsc
+{
 
   const std::string SCAN_OPTION_LINEAR = "linear";
   const std::string SCAN_OPTION_LOG = "log";
   const std::string SCAN_OPTION_2_SIDED_LOG = "2 sided log";
   const std::string SCAN_OPTION_2_SIDED_LOG_EXCEPT_Z0s1 = "2 sided log except Z0s1";
 
-  enum {ATTEMPTS,
+  enum
+  {
+    ATTEMPTS,
     KEPT,
     REJECTED_DUE_TO_R0_CRUDE,
     REJECTED_DUE_TO_R0,
+    REJECTED_DUE_TO_R0_MAX,
     REJECTED_DUE_TO_CURVATURE,
     REJECTED_DUE_TO_IOTA,
     REJECTED_DUE_TO_ELONGATION,
@@ -34,9 +38,11 @@ namespace qsc {
     REJECTED_DUE_TO_R_SINGULARITY,
     N_SIGMA_EQ_SOLVES,
     N_R2_SOLVES,
-    N_FILTERS};
+    N_FILTERS
+  };
 
-  enum {
+  enum
+  {
     TIME_RANDOM,
     TIME_INIT_AXIS,
     TIME_SIGMA_EQUATION,
@@ -45,16 +51,18 @@ namespace qsc {
     TIME_MERCIER,
     TIME_GRAD_GRAD_B_TENSOR,
     TIME_R_SINGULARITY,
-    N_TIMES};
-    
-  class Scan {
+    N_TIMES
+  };
+
+  class Scan
+  {
   private:
     big filters_local[N_FILTERS];
     std::chrono::time_point<std::chrono::steady_clock> start_time;
     qscfloat timing_local[N_TIMES];
     void defaults();
-    void collect_results(int, Matrix&, Matrix&, int, std::valarray<int>&, big);
-    
+    void collect_results(int, Matrix &, Matrix &, int, std::valarray<int> &, big);
+
   public:
     Qsc q;
     MPI_Comm mpi_comm;
@@ -67,7 +75,7 @@ namespace qsc {
     big n_scan, filters[N_FILTERS];
     qscfloat filter_fractions[N_FILTERS], timing[N_TIMES];
     int max_keep_per_proc, max_attempts_per_proc; // Can I read in a "big" from toml?
-    qscfloat min_R0_to_keep, min_iota_to_keep, max_elongation_to_keep;
+    qscfloat min_R0_to_keep, max_R0_to_keep, min_iota_to_keep, max_elongation_to_keep;
     qscfloat min_L_grad_B_to_keep, min_L_grad_grad_B_to_keep;
     qscfloat max_B20_variation_to_keep, min_r_singularity_to_keep;
     qscfloat max_d2_volume_d_psi2_to_keep, min_DMerc_times_r2_to_keep;
@@ -77,14 +85,14 @@ namespace qsc {
 
     Vector scan_eta_bar, scan_sigma0, scan_B2s, scan_B2c;
     Matrix scan_R0c, scan_R0s, scan_Z0c, scan_Z0s;
-    Vector scan_min_R0, scan_max_curvature;
+    Vector scan_min_R0, scan_max_R0, scan_max_curvature;
     Vector scan_iota, scan_max_elongation;
     Vector scan_min_L_grad_B, scan_min_L_grad_grad_B;
     Vector scan_r_singularity, scan_B20_variation, scan_B20_residual;
     Vector scan_d2_volume_d_psi2, scan_DMerc_times_r2;
     Vector scan_standard_deviation_of_R, scan_standard_deviation_of_Z;
     std::valarray<int> scan_helicity;
-    
+
     Scan();
     void run(std::string);
     void input(std::string);
@@ -94,4 +102,3 @@ namespace qsc {
 }
 
 #endif
-

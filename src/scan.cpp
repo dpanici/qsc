@@ -3,7 +3,8 @@
 
 using namespace qsc;
 
-void Scan::defaults() {
+void Scan::defaults()
+{
   // Set defaults.
   mpi_comm = MPI_COMM_WORLD;
   verbose = 1;
@@ -12,7 +13,7 @@ void Scan::defaults() {
   max_keep_per_proc = 1000;
   max_attempts_per_proc = -1;
   deterministic = false;
-  
+
   eta_bar_min = 1.0;
   eta_bar_max = 1.0;
   sigma0_min = 0.0;
@@ -21,7 +22,7 @@ void Scan::defaults() {
   B2c_max = 0.0;
   B2s_min = 0.0;
   B2s_max = 0.0;
-    
+
   R0c_min.resize(1, 1.0);
   R0c_max.resize(1, 1.0);
   R0s_min.resize(1, 0.0);
@@ -39,6 +40,8 @@ void Scan::defaults() {
 
   keep_all = true;
   min_R0_to_keep = -1.0;
+  max_R0_to_keep = 1.0e+30;
+
   min_iota_to_keep = -1.0;
   max_elongation_to_keep = 10.0;
   min_L_grad_B_to_keep = -1.0;
@@ -49,11 +52,13 @@ void Scan::defaults() {
   min_DMerc_times_r2_to_keep = -1.0e+30;
 }
 
-Scan::Scan() {
+Scan::Scan()
+{
   defaults();
 }
 
-void Scan::run(std::string directory_and_infile) {
+void Scan::run(std::string directory_and_infile)
+{
   outfilename = qsc::outfile(directory_and_infile);
   input(directory_and_infile);
   random();

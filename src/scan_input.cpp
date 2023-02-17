@@ -7,21 +7,22 @@ using namespace qsc;
 
 /** Read in a scan input file
  */
-void Scan::input(std::string filename) {
+void Scan::input(std::string filename)
+{
 
   q.input(filename);
-    
+
   auto toml_file = toml::parse(filename);
   auto indata = toml::find(toml_file, "scan");
-  
+
   std::vector<std::string> varlist;
-  
+
   toml_read(varlist, indata, "eta_bar_scan_option", eta_bar_scan_option);
   toml_read(varlist, indata, "sigma0_scan_option", sigma0_scan_option);
   toml_read(varlist, indata, "B2c_scan_option", B2c_scan_option);
   toml_read(varlist, indata, "B2s_scan_option", B2s_scan_option);
   toml_read(varlist, indata, "fourier_scan_option", fourier_scan_option);
-  
+
   toml_read(varlist, indata, "eta_bar_min", eta_bar_min);
   toml_read(varlist, indata, "eta_bar_max", eta_bar_max);
   toml_read(varlist, indata, "sigma0_min", sigma0_min);
@@ -48,6 +49,8 @@ void Scan::input(std::string filename) {
 
   toml_read(varlist, indata, "keep_all", keep_all);
   toml_read(varlist, indata, "min_R0_to_keep", min_R0_to_keep);
+  toml_read(varlist, indata, "max_R0_to_keep", max_R0_to_keep);
+
   toml_read(varlist, indata, "min_iota_to_keep", min_iota_to_keep);
   toml_read(varlist, indata, "max_elongation_to_keep", max_elongation_to_keep);
   toml_read(varlist, indata, "min_L_grad_B_to_keep", min_L_grad_B_to_keep);
@@ -58,7 +61,7 @@ void Scan::input(std::string filename) {
   toml_read(varlist, indata, "max_d2_volume_d_psi2_to_keep", max_d2_volume_d_psi2_to_keep);
 
   toml_unused(varlist, indata);
-  
+
   // Now, make {R0c, R0s, Z0c, Z0s} have the same size.
   std::size_t newsize = 0;
   newsize = std::max(newsize, R0c_min.size());
@@ -92,7 +95,7 @@ void Scan::input(std::string filename) {
   std::cout << "Z0c_max: " << Z0c_max << std::endl;
   std::cout << "Z0s_min: " << Z0s_min << std::endl;
   std::cout << "Z0s_max: " << Z0s_max << std::endl;
-  
+
   std::cout << "eta_bar_scan_option: " << eta_bar_scan_option << std::endl;
   std::cout << "sigma0_scan_option: " << sigma0_scan_option << std::endl;
   std::cout << "B2c_scan_option: " << B2c_scan_option << std::endl;
@@ -104,8 +107,10 @@ void Scan::input(std::string filename) {
   std::cout << "max_keep_per_proc: " << max_keep_per_proc << std::endl;
   std::cout << "deterministic: " << deterministic << std::endl;
   std::cout << "keep_all: " << keep_all << std::endl;
-  if (!keep_all) {
+  if (!keep_all)
+  {
     std::cout << "min_R0_to_keep: " << min_R0_to_keep << std::endl;
+    std::cout << "max_R0_to_keep: " << max_R0_to_keep << std::endl;
     std::cout << "min_iota_to_keep: " << min_iota_to_keep << std::endl;
     std::cout << "max_elongation_to_keep: " << max_elongation_to_keep << std::endl;
     std::cout << "min_L_grad_B_to_keep: " << min_L_grad_B_to_keep << std::endl;

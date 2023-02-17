@@ -7,16 +7,20 @@
 
 using namespace qsc;
 
-void Scan::write_netcdf() {
+void Scan::write_netcdf()
+{
   // Only proc 0 should run this subroutine:
   int mpi_rank;
   MPI_Comm_rank(mpi_comm, &mpi_rank);
-  if (mpi_rank != 0) return;
-  
-  std::chrono::time_point<std::chrono::steady_clock> start;
-  if (verbose > 0) start = std::chrono::steady_clock::now();
+  if (mpi_rank != 0)
+    return;
 
-  if (verbose > 0) std::cout << "Writing output to " << outfilename << std::endl;
+  std::chrono::time_point<std::chrono::steady_clock> start;
+  if (verbose > 0)
+    start = std::chrono::steady_clock::now();
+
+  if (verbose > 0)
+    std::cout << "Writing output to " << outfilename << std::endl;
   qsc::NetCDFWriter nc(outfilename, false);
 
   // Define dimensions
@@ -24,12 +28,12 @@ void Scan::write_netcdf() {
   nphi_dim = nc.dim("nphi", q.nphi);
   axis_nmax_plus_1_dim = nc.dim("axis_nmax_plus_1", R0c_max.size());
   n_scan_dim = nc.dim("n_scan", n_scan);
-  
+
   // Scalars
   std::string general_option = "random";
   nc.put("general_option", general_option, "Whether this job was a single configuration vs a scan");
-  
-  int at_least_order_r2_int = (int) q.at_least_order_r2;
+
+  int at_least_order_r2_int = (int)q.at_least_order_r2;
   nc.put("at_least_order_r2", at_least_order_r2_int, "1 if the O(r^2) equations were solved, 0 if not", "dimensionless");
   nc.put("order_r_option", q.order_r_option, "Whether the Garren-Boozer equations were solved to 1st or 2nd order in the effective minor radius r");
   nc.put("nfp", q.nfp, "Number of field periods", "dimensionless");
@@ -39,7 +43,8 @@ void Scan::write_netcdf() {
   nc.put("eta_bar_scan_option", eta_bar_scan_option, "Whether a linear vs logarithmic distribution was used for choosing eta_bar in the scan");
   nc.put("sigma0_scan_option", sigma0_scan_option, "Whether a linear vs logarithmic distribution was used for choosing sigma0 in the scan");
   nc.put("fourier_scan_option", fourier_scan_option, "Whether a linear vs logarithmic distribution was used for choosing the Fourier amplitudes of the magnetic axis in the scan");
-  if (q.at_least_order_r2) {
+  if (q.at_least_order_r2)
+  {
     nc.put("B2c_scan_option", B2c_scan_option, "Whether a linear vs logarithmic distribution was used for choosing B2c in the scan");
     nc.put("B2s_scan_option", B2s_scan_option, "Whether a linear vs logarithmic distribution was used for choosing B2s in the scan");
   }
@@ -48,13 +53,14 @@ void Scan::write_netcdf() {
   nc.put("eta_bar_max", eta_bar_max, "Maximum value for eta_bar in the scan", "1/meter");
   nc.put("sigma0_min", sigma0_min, "Minimum value for sigma0 in the scan", "1/meter");
   nc.put("sigma0_max", sigma0_max, "Maximum value for sigma0 in the scan", "1/meter");
-  if (q.at_least_order_r2) {
+  if (q.at_least_order_r2)
+  {
     nc.put("B2c_min", B2c_min, "Minimum value for B2c in the scan", "1/meter");
     nc.put("B2c_max", B2c_max, "Maximum value for B2c in the scan", "1/meter");
     nc.put("B2s_min", B2s_min, "Minimum value for B2s in the scan", "1/meter");
     nc.put("B2s_max", B2s_max, "Maximum value for B2s in the scan", "1/meter");
   }
-  
+
   int n_scan_int = (int)n_scan;
   nc.put("n_scan", n_scan_int, "Number of configurations kept from the scan and saved in this file", "dimensionless");
   nc.put("attempts", filters[ATTEMPTS], "Number of configurations examined in the scan", "dimensionless");
@@ -87,16 +93,19 @@ void Scan::write_netcdf() {
   nc.put("fraction_rejected_due_to_DMerc", filter_fractions[REJECTED_DUE_TO_DMERC], "Fraction of configurations in the scan that were rejected due to the min_DMerc_times_r2_to_keep filter", "dimensionless");
   nc.put("fraction_rejected_due_to_r_singularity", filter_fractions[REJECTED_DUE_TO_R_SINGULARITY], "Fraction of configurations in the scan that were rejected due to the min_r_singularity_to_keep filter", "dimensionless");
 
-  int keep_all_int = (int) keep_all;
+  int keep_all_int = (int)keep_all;
   nc.put("keep_all", keep_all_int, "1 if all configurations from the scan were saved, 0 if some configurations were filtered out", "dimensionless");
-  int deterministic_int = (int) deterministic;
+  int deterministic_int = (int)deterministic;
   nc.put("deterministic", deterministic_int, "1 if a deterministic pseudo-random number generator and seed were used, 1 if a random seed based on the time was used.", "dimensionless");
-  if (!keep_all) {
+  if (!keep_all)
+  {
     nc.put("min_R0_to_keep", min_R0_to_keep, "Configurations were kept in the scan only if the major radius of the magnetic axis was at least this value", "meter");
+    nc.put("max_R0_to_keep", max_R0_to_keep, "Configurations were kept in the scan only if the major radius of the magnetic axis was at most this value", "meter");
     nc.put("min_iota_to_keep", min_iota_to_keep, "Configurations were kept in the scan only if the absolute value of the on-axis rotational transform was at least this value", "dimensionless");
     nc.put("max_elongation_to_keep", max_elongation_to_keep, "Configurations were kept in the scan only if the elongation (in the plane perpendicular to the magnetic axis) was no greater than this value at all toroidal angles", "dimensionless");
     nc.put("min_L_grad_B_to_keep", min_L_grad_B_to_keep, "Configurations were kept in the scan only if the scale length L_grad_B (eq (3.1) in Landreman J Plasma Physics (2021)) is at least this value at each toroidal angle", "meter");
-    if (q.at_least_order_r2) {
+    if (q.at_least_order_r2)
+    {
       nc.put("min_L_grad_grad_B_to_keep", min_L_grad_grad_B_to_keep, "Configurations were kept in the scan only if the scale length L_grad_grad_B (eq (3.2) in Landreman J Plasma Physics (2021)) is at least this value at each toroidal angle", "meter");
       nc.put("max_B20_variation_to_keep", max_B20_variation_to_keep, "Configurations were kept in the scan only if the range (maximum minus minimum) of B20 over toroidal angle is no more than this value", "Tesla/(meter^2)");
       nc.put("min_r_singularity_to_keep", min_r_singularity_to_keep, "Configurations were kept in the scan only if r_singularity_robust is at least this value. r_singularity_robust is the robust estimate of the minor radius at which the flux surface shapes become singular, r_c, as detailed in section 4.2 of Landreman, J Plasma Physics (2021)", "meter");
@@ -112,7 +121,8 @@ void Scan::write_netcdf() {
   nc.put("B0", q.B0, "Magnetic field magnitude on the magnetic axis", "Telsa");
   nc.put("sG", q.sG, "Sign of G0", "dimensionless");
   nc.put("spsi", q.spsi, "Sign of the toroidal flux psi", "dimensionless");
-  if (q.at_least_order_r2) {
+  if (q.at_least_order_r2)
+  {
     nc.put("p2", q.p2, "r^2 term in p(r), the pressure profile", "Pascal/(meter^2)");
   }
 
@@ -125,44 +135,47 @@ void Scan::write_netcdf() {
   nc.put(axis_nmax_plus_1_dim, "Z0c_max", Z0c_max, "Maximum values in the scan for each cos(n*phi) Fourier amplitude of the Cartesian Z component of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_dim, "Z0s_min", Z0s_min, "Minimum values in the scan for each sin(n*phi) Fourier amplitude of the Cartesian Z component of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_dim, "Z0s_max", Z0s_max, "Maximum values in the scan for each sin(n*phi) Fourier amplitude of the Cartesian Z component of the magnetic axis", "meter");
-  
+
   nc.put(nphi_dim, "phi", q.phi, "The grid in the standard toroidal angle phi", "dimensionless");
   nc.put(n_scan_dim, "scan_eta_bar", scan_eta_bar, "For each configuration kept from the scan, the constant equal to B1c / B0", "1/meter");
   nc.put(n_scan_dim, "scan_sigma0", scan_sigma0, "For each configuration kept from the scan, the value of sigma at phi=0", "dimensionless");
-  if (q.at_least_order_r2) {
+  if (q.at_least_order_r2)
+  {
     nc.put(n_scan_dim, "scan_B2c", scan_B2c, "For each configuration kept from the scan, the r^2 * cos(2*theta) term in |B|", "Tesla/(meter^2)");
     nc.put(n_scan_dim, "scan_B2s", scan_B2s, "For each configuration kept from the scan, the r^2 * sin(2*theta) term in |B|", "Tesla/(meter^2)");
   }
   nc.put(n_scan_dim, "scan_iota", scan_iota, "For each configuration kept from the scan, the rotational transform on axis", "dimensionless");
   nc.put(n_scan_dim, "scan_min_R0", scan_min_R0, "For each configuration kept from the scan, the minimum value of R0, the major radius of the magnetic axis. This variable corresponds to grid_min_R0 in a single Qsc calculation.", "meter");
+  nc.put(n_scan_dim, "scan_max_R0", scan_max_R0, "For each configuration kept from the scan, the maximum value of R0, the major radius of the magnetic axis. This variable corresponds to grid_max_R0 in a single Qsc calculation.", "meter");
   nc.put(n_scan_dim, "scan_max_curvature", scan_max_curvature, "For each configuration kept from the scan, the maximum curvature of the magnetic axis", "1/meter");
   nc.put(n_scan_dim, "scan_max_elongation", scan_max_elongation, "For each configuration kept from the scan, the maximum along the magnetic axis of the elongation in the plane perpendicular to the axis", "dimensionless");
   nc.put(n_scan_dim, "scan_min_L_grad_B", scan_min_L_grad_B, "For each configuration kept from the scan, the minimum along the magnetic axis of the scale length L_grad_B, (eq (3.1) in Landreman J Plasma Physics (2021). This quantity corresponds to grid_min_L_grad_B for a single Qsc run.", "meter");
   nc.put(n_scan_dim, "scan_helicity", scan_helicity, "For each configuration kept from the scan, the number of times the normal vector of the magnetic axis rotates poloidally as the axis is followed toroidally for one field period. The integer N appearing in our papers is equal to -helicity * nfp.", "dimensionless");
   nc.put(n_scan_dim, "scan_standard_deviation_of_R", scan_standard_deviation_of_R, "Standard deviation of the major radius of the magnetic axis, with respect to arclength along the axis", "meter");
   nc.put(n_scan_dim, "scan_standard_deviation_of_Z", scan_standard_deviation_of_Z, "Standard deviation of the Cartesian Z coordinate of the magnetic axis, with respect to arclength along the axis", "meter");
-  if (q.at_least_order_r2) {
+  if (q.at_least_order_r2)
+  {
     nc.put(n_scan_dim, "scan_min_L_grad_grad_B", scan_min_L_grad_grad_B, "For each configuration kept from the scan, the minimum along the magnetic axis of the scale length L_grad_grad_B, (eq (3.2) in Landreman J Plasma Physics (2021). This quantity corresponds to grid_min_L_grad_grad_B for a single Qsc run.", "meter");
     nc.put(n_scan_dim, "scan_B20_variation", scan_B20_variation, "For each configuration kept from the scan, the maximum of B20 along the magnetic axis minus the minimum of B20. This quantity corresponds to B20_grid_variation for a single Qsc run.", "Telsa/(meter^2)");
     nc.put(n_scan_dim, "scan_B20_residual", scan_B20_residual, "", "");
     nc.put(n_scan_dim, "scan_r_singularity", scan_r_singularity, "For each configuration kept from the scan, the value of r_singularity_robust. r_singularity_robust is the robust estimate of the minor radius at which the flux surface shapes become singular, r_c, as detailed in section 4.2 of Landreman, J Plasma Physics (2021)", "meter");
     nc.put(n_scan_dim, "scan_d2_volume_d_psi2", scan_d2_volume_d_psi2, "For each configuration kept from the scan, the value of magnetic well d2_volume_d_psi2, the second derivative of flux surface volume with respect to psi, where 2*pi*psi is the toroidal flux.", "Tesla^{-2} meter^{-1}");
     nc.put(n_scan_dim, "scan_DMerc_times_r2", scan_DMerc_times_r2, "For each configuration kept from the scan, the overall Mercier stability criterion times the square of the effective minor radius r. This quantity corresponds to DMerc_times_r2 for a single Qsc run. DMerc (without the r^2) corresponds to the quantity DMerc in VMEC, and to DMerc in Landreman and Jorge, J Plasma Phys (2020).", "Tesla^{-2} meter^{-2}");
-
   }
 
   // ND arrays for N > 1:
-  std::vector<dim_id_type> axis_nmax_plus_1_n_scan_dim {axis_nmax_plus_1_dim, n_scan_dim};
+  std::vector<dim_id_type> axis_nmax_plus_1_n_scan_dim{axis_nmax_plus_1_dim, n_scan_dim};
   nc.put(axis_nmax_plus_1_n_scan_dim, "scan_R0c", &scan_R0c(0, 0), "For each configuration kept from the scan, the amplitudes of the cos(n*phi) components of the major radius of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_n_scan_dim, "scan_R0s", &scan_R0s(0, 0), "For each configuration kept from the scan, the amplitudes of the sin(n*phi) components of the major radius of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_n_scan_dim, "scan_Z0c", &scan_Z0c(0, 0), "For each configuration kept from the scan, the amplitudes of the cos(n*phi) components of the Cartesian Z coordinate of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_n_scan_dim, "scan_Z0s", &scan_Z0s(0, 0), "For each configuration kept from the scan, the amplitudes of the sin(n*phi) components of the Cartesian Z coordinate of the magnetic axis", "meter");
- 
+
   // Done defining the NetCDF data.
   nc.write_and_close();
-  
-  if (verbose > 0) {
-    auto end = std::chrono::steady_clock::now();    
+
+  if (verbose > 0)
+  {
+    auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "Time for write_netcdf: "
               << elapsed.count() << " seconds" << std::endl;

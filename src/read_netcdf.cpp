@@ -13,90 +13,100 @@ using namespace qsc;
 #define nc_get_var_qscfloat nc_get_var_double
 #endif
 
-namespace qsc {
-  
+namespace qsc
+{
+
   /** A class to streamline the process of reading a NetCDF file.
    */
-  class NetCDFReader {
+  class NetCDFReader
+  {
   private:
     int ncid, ndims, nvars, ngatts, unlimdimid;
     static void ERR(int);
-    
+
   public:
     NetCDFReader(std::string);
-    
+
     // Scalars:
-    void get(std::string, int&);
-    void get(std::string, qscfloat&);
+    void get(std::string, int &);
+    void get(std::string, qscfloat &);
     // Vectors
-    void get(std::string, Vector&);
+    void get(std::string, Vector &);
     // Strings
-    void get(std::string, std::string&);
-	     
+    void get(std::string, std::string &);
+
     void close();
   };
 }
 
-qsc::NetCDFReader::NetCDFReader(std::string filename) {
+qsc::NetCDFReader::NetCDFReader(std::string filename)
+{
   int retval;
   if ((retval = nc_open(filename.c_str(), NC_NOWRITE, &ncid)))
     ERR(retval);
   // Get the number of dimensions, variables, etc:
   if ((retval = nc_inq(ncid, &ndims, &nvars, &ngatts, &unlimdimid)))
-      ERR(retval);
+    ERR(retval);
 }
 
-void qsc::NetCDFReader::ERR(int e) {
+void qsc::NetCDFReader::ERR(int e)
+{
   std::cout << "NetCDF Error! " << nc_strerror(e) << std::endl;
   throw std::runtime_error(nc_strerror(e));
 }
 
-void qsc::NetCDFReader::get(std::string varname, int& var) {
+void qsc::NetCDFReader::get(std::string varname, int &var)
+{
   int var_id, retval;
   if ((retval = nc_inq_varid(ncid, varname.c_str(), &var_id)))
-      ERR(retval);
+    ERR(retval);
   if ((retval = nc_get_var_int(ncid, var_id, &var)))
-      ERR(retval);
+    ERR(retval);
 }
 
-void qsc::NetCDFReader::get(std::string varname, qscfloat& var) {
+void qsc::NetCDFReader::get(std::string varname, qscfloat &var)
+{
   int var_id, retval;
   if ((retval = nc_inq_varid(ncid, varname.c_str(), &var_id)))
-      ERR(retval);
+    ERR(retval);
   if ((retval = nc_get_var_qscfloat(ncid, var_id, &var)))
-      ERR(retval);
+    ERR(retval);
 }
 
-void qsc::NetCDFReader::get(std::string varname, Vector& var) {
+void qsc::NetCDFReader::get(std::string varname, Vector &var)
+{
   int var_id, retval;
   if ((retval = nc_inq_varid(ncid, varname.c_str(), &var_id)))
-      ERR(retval);
+    ERR(retval);
   if ((retval = nc_get_var_qscfloat(ncid, var_id, &var[0])))
-      ERR(retval);
+    ERR(retval);
 }
 
-void qsc::NetCDFReader::get(std::string varname, std::string& var) {
+void qsc::NetCDFReader::get(std::string varname, std::string &var)
+{
   int var_id, retval;
   char nc_string[50]; // 50 is hard-coded as the string length in quasisymmetry_variables.f90
   if ((retval = nc_inq_varid(ncid, varname.c_str(), &var_id)))
-      ERR(retval);
+    ERR(retval);
   if ((retval = nc_get_var_text(ncid, var_id, nc_string)))
-      ERR(retval);
+    ERR(retval);
   // Convert char array to std::string
-  //std::cout << "nc_string:" << nc_string << std::endl;
+  // std::cout << "nc_string:" << nc_string << std::endl;
   var = std::string(nc_string);
-  //std::cout << "var:" << var << " size=" << var.size() << " var[2]=" << ((int)var[2])
+  // std::cout << "var:" << var << " size=" << var.size() << " var[2]=" << ((int)var[2])
   //	    << " var[3]=" << ((int)var[3]) << std::endl;
-  // NetCDF pads the strings with spaces (ascii 32) no ascii 0.
+  //  NetCDF pads the strings with spaces (ascii 32) no ascii 0.
   int index = var.find(" ");
-  //std::cout << "index=" << index << std::endl;
+  // std::cout << "index=" << index << std::endl;
   var.resize(index);
-  //std::cout << "After resize, var:" << var << " size=" << var.size() << std::endl;
+  // std::cout << "After resize, var:" << var << " size=" << var.size() << std::endl;
 }
 
-void qsc::NetCDFReader::close() {
+void qsc::NetCDFReader::close()
+{
   int retval;
-  if ((retval = nc_close(ncid))) ERR(retval);
+  if ((retval = nc_close(ncid)))
+    ERR(retval);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -106,23 +116,30 @@ void qsc::NetCDFReader::close() {
 /** Read in quantities for a Qsc object from a NetCDF file. This
     function is used for testing.
  */
-void Qsc::read_netcdf(std::string filename, char C_or_F) {
-  if (C_or_F != 'C' && C_or_F != 'F') throw std::runtime_error("C_or_F must be C or F");
+void Qsc::read_netcdf(std::string filename, char C_or_F)
+{
+  if (C_or_F != 'C' && C_or_F != 'F')
+    throw std::runtime_error("C_or_F must be C or F");
   int fortran = (C_or_F == 'F');
-  
-  if (verbose > 0) std::cout << "About to try reading netcdf file " << filename << std::endl;
+
+  if (verbose > 0)
+    std::cout << "About to try reading netcdf file " << filename << std::endl;
   qsc::NetCDFReader nc(filename);
 
-  if (fortran) {
+  if (fortran)
+  {
     nc.get("N_phi", nphi);
     nc.get("order_r_option", order_r_option);
     std::cout << "order_r_option:" << order_r_option << std::endl;
     at_least_order_r2 = !(order_r_option.compare("r1") == 0);
     std::cout << "at_least_order_r2:" << at_least_order_r2 << std::endl;
-    if (order_r_option.compare("r3_flux_constraint") == 0) {
+    if (order_r_option.compare("r3_flux_constraint") == 0)
+    {
       order_r2p1 = true;
       order_r3 = true;
-    } else {
+    }
+    else
+    {
       order_r2p1 = false;
       order_r3 = false;
     }
@@ -144,7 +161,8 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
     nc.get("standard_deviation_of_Z", standard_deviation_of_Z);
     nc.get("axis_helicity", helicity);
     nc.get("B0", B0);
-    if (at_least_order_r2) {
+    if (at_least_order_r2)
+    {
       nc.get("p2", p2);
       nc.get("B2s", B2s);
       nc.get("B2c", B2c);
@@ -156,7 +174,7 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
       nc.get("DMerc_times_r2", DMerc_times_r2);
       nc.get("r_singularity", r_singularity_robust);
     }
-    
+
     // Vectors
     nc.get("phi", phi);
     nc.get("Boozer_toroidal_angle", Boozer_toroidal_angle);
@@ -168,10 +186,11 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
     nc.get("X1c", X1c);
     nc.get("Y1c", Y1c);
     nc.get("Y1s", Y1s);
-    nc.get("elongation", elongation);    
+    nc.get("elongation", elongation);
     nc.get("d_l_d_phi", d_l_d_phi);
     nc.get("modBinv_sqrt_half_grad_B_colon_grad_B", L_grad_B_inverse);
-    if (at_least_order_r2) {
+    if (at_least_order_r2)
+    {
       nc.get("X20", X20);
       nc.get("X2s", X2s);
       nc.get("X2c", X2c);
@@ -186,7 +205,8 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
       L_grad_grad_B = ((qscfloat)1.0) / L_grad_grad_B_inverse;
       nc.get("r_singularity_basic_vs_zeta", r_hat_singularity_robust);
     }
-    if (order_r3) {
+    if (order_r3)
+    {
       nc.get("X3s1", X3s1);
       nc.get("X3s3", X3s3);
       nc.get("X3c1", X3c1);
@@ -197,23 +217,25 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
       nc.get("Y3c1", Y3c1);
       nc.get("Y3c3", Y3c3);
     }
-    
-  } else {
+  }
+  else
+  {
     // Data saved by the C++ version
-    
+
     nc.get("nphi", nphi);
     int tempint;
     nc.get("at_least_order_r2", tempint);
-    at_least_order_r2 = (bool) tempint;
+    at_least_order_r2 = (bool)tempint;
     nc.get("order_r2.1", tempint);
-    order_r2p1 = (bool) tempint;
+    order_r2p1 = (bool)tempint;
     nc.get("order_r3", tempint);
-    order_r3 = (bool) tempint;
-    if (verbose > 0) std::cout << "Read at_least_order_r2=" << at_least_order_r2
-			       << " order_r2p1=" << order_r2p1 << " order_r3=" << order_r3 << std::endl;
+    order_r3 = (bool)tempint;
+    if (verbose > 0)
+      std::cout << "Read at_least_order_r2=" << at_least_order_r2
+                << " order_r2p1=" << order_r2p1 << " order_r3=" << order_r3 << std::endl;
 
     allocate();
-    
+
     // Scalars
     nc.get("nfp", nfp);
     nc.get("eta_bar", eta_bar);
@@ -233,6 +255,7 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
     nc.get("grid_max_curvature", grid_max_curvature);
     nc.get("grid_max_elongation", grid_max_elongation);
     nc.get("grid_min_R0", grid_min_R0);
+    nc.get("grid_max_R0", grid_max_R0);
     nc.get("grid_min_L_grad_B", grid_min_L_grad_B);
     nc.get("mean_elongation", mean_elongation);
     nc.get("mean_R", mean_R);
@@ -244,7 +267,8 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
     nc.get("newton_tolerance", newton_tolerance);
     nc.get("iota", iota);
     nc.get("iota_N", iota_N);
-    if (at_least_order_r2) {
+    if (at_least_order_r2)
+    {
       nc.get("B2c", B2c);
       nc.get("B2s", B2s);
       nc.get("p2", p2);
@@ -280,7 +304,8 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
     nc.get("d_X1c_d_varphi", d_X1c_d_varphi);
     nc.get("d_Y1c_d_varphi", d_Y1c_d_varphi);
     nc.get("d_Y1s_d_varphi", d_Y1s_d_varphi);
-    if (at_least_order_r2) {
+    if (at_least_order_r2)
+    {
       nc.get("X20", X20);
       nc.get("X2s", X2s);
       nc.get("X2c", X2c);
@@ -305,7 +330,8 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
       nc.get("L_grad_grad_B_inverse", L_grad_grad_B_inverse);
       nc.get("r_hat_singularity_robust", r_hat_singularity_robust);
     }
-    if (order_r3) {
+    if (order_r3)
+    {
       nc.get("X3s1", X3s1);
       nc.get("X3s3", X3s3);
       nc.get("X3c1", X3c1);
@@ -320,5 +346,4 @@ void Qsc::read_netcdf(std::string filename, char C_or_F) {
   // nc.get("", );
 
   nc.close();
-  
 }

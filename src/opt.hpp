@@ -6,24 +6,28 @@
 #include <gsl/gsl_vector.h>
 #include "qsc.hpp"
 
-namespace qsc {
+namespace qsc
+{
 
-  typedef enum {
+  typedef enum
+  {
     GSL_LM,
     GSL_DOGLEG,
     GSL_DDOGLEG,
     GSL_SUBSPACE2D
   } algorithm_type;
 
-  typedef enum {
+  typedef enum
+  {
     DIFF_METHOD_FORWARD,
     DIFF_METHOD_CENTERED
   } diff_method_type;
-  
-  class Opt {
-  private:    
+
+  class Opt
+  {
+  private:
     void defaults();
-    
+
   public:
     Qsc q;
     int max_iter, n_iter;
@@ -45,11 +49,11 @@ namespace qsc {
     bool vary_eta_bar, vary_sigma0;
     bool vary_B2c, vary_B2s;
     std::valarray<bool> vary_R0c, vary_R0s, vary_Z0c, vary_Z0s;
-    
+
     qscfloat weight_B20, weight_iota, target_iota;
     qscfloat weight_elongation, weight_curvature;
-    qscfloat weight_R0, min_R0;
-    qscfloat weight_d2_volume_d_psi2, max_d2_volume_d_psi2; 
+    qscfloat weight_R0, min_R0, max_R0;
+    qscfloat weight_d2_volume_d_psi2, max_d2_volume_d_psi2;
     qscfloat weight_DMerc_times_r2, min_DMerc_times_r2;
     qscfloat weight_XY2, weight_XY2Prime, weight_XY2PrimePrime;
     qscfloat weight_Z2, weight_Z2Prime;
@@ -79,10 +83,10 @@ namespace qsc {
     Vector iter_grad_B_term, iter_grad_grad_B_term, iter_r_singularity_term;
     Vector iter_axis_length_term, iter_standard_deviation_of_R_term;
     Vector iter_B20_mean_term;
-    
+
     Vector iter_eta_bar, iter_sigma0, iter_B2s, iter_B2c;
     Matrix iter_R0c, iter_R0s, iter_Z0c, iter_Z0s;
-    Vector iter_min_R0, iter_max_curvature;
+    Vector iter_min_R0, iter_max_R0, iter_max_curvature;
     Vector iter_iota, iter_max_elongation;
     Vector iter_min_L_grad_B, iter_min_L_grad_grad_B;
     Vector iter_r_singularity, iter_B20_variation, iter_B20_residual;
@@ -90,7 +94,7 @@ namespace qsc {
     Vector iter_standard_deviation_of_R, iter_standard_deviation_of_Z;
     Vector iter_axis_length;
     std::valarray<int> iter_fourier_refine_step;
-    
+
     Opt();
     void run(std::string);
     void allocate();
@@ -99,11 +103,10 @@ namespace qsc {
     void input(std::string);
     void optimize();
     void write_netcdf();
-    void set_state_vector(qscfloat*);
-    void unpack_state_vector(qscfloat*);
+    void set_state_vector(qscfloat *);
+    void unpack_state_vector(qscfloat *);
     void set_residuals(gsl_vector *);
   };
 }
 
 #endif
-

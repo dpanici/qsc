@@ -3,8 +3,10 @@
 
 using namespace qsc;
 
-void Opt::write_netcdf() {
-  if (verbose > 0) std::cout << "Writing output to " << outfilename << std::endl;
+void Opt::write_netcdf()
+{
+  if (verbose > 0)
+    std::cout << "Writing output to " << outfilename << std::endl;
   // Write the final configuration:
   q.write_netcdf(outfilename);
   // Append extra info about the optimization:
@@ -18,7 +20,7 @@ void Opt::write_netcdf() {
   // Scalars
   nc.put("n_iter", n_iter, "Number of optimization iterations saved", "dimensionless");
   nc.put("n_evals", n_evals, "Number of evaluations of the objective function", "dimensionless");
-  
+
   nc.put("weight_B20", weight_B20, "Weight for the B20 term in the objective function for optimization", "dimensionless");
   nc.put("weight_iota", weight_iota, "Weight for the iota term in the objective function for optimization", "dimensionless");
   nc.put("weight_elongation", weight_elongation, "Weight for the elongation term in the objective function for optimization", "dimensionless");
@@ -45,8 +47,10 @@ void Opt::write_netcdf() {
 
   nc.put("target_iota", target_iota, "Target iota for the iota term in the objective function for optimization", "dimensionless");
   nc.put("min_R0", min_R0, "Minimum major radius of the magnetic axis for the associated penalty term in the objective function for optimization", "dimensionless");
+  nc.put("max_R0", max_R0, "Maximum major radius of the magnetic axis for the associated penalty term in the objective function for optimization", "dimensionless");
+
   nc.put("target_axis_length", target_axis_length, "Target length of the magnetic axis for the iota term in the objective function for optimization", "meters");
-  
+
   // 1D Vectors
   nc.put(n_iter_dim, "iter_fourier_refine_step", iter_fourier_refine_step, "Step number with respect to expanding the number of Fourier modes for the axis shape", "dimensionless");
   nc.put(n_iter_dim, "iter_objective_function", iter_objective_function, "Total objective function at each iteration", "dimensionless");
@@ -76,6 +80,7 @@ void Opt::write_netcdf() {
   nc.put(n_iter_dim, "iter_B2c", iter_B2c, "B2c at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_B2s", iter_B2s, "B2s at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_min_R0", iter_min_R0, "Min_R0 at each iteration", "dimensionless");
+  nc.put(n_iter_dim, "iter_max_R0", iter_max_R0, "Max_R0 at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_max_curvature", iter_max_curvature, "max_curvature at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_iota", iter_iota, "iota at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_max_elongation", iter_max_elongation, "max_elongation at each iteration", "dimensionless");
@@ -89,11 +94,11 @@ void Opt::write_netcdf() {
   nc.put(n_iter_dim, "iter_standard_deviation_of_R", iter_standard_deviation_of_R, "standard_deviation_of_R at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_standard_deviation_of_Z", iter_standard_deviation_of_Z, "standard_deviation_of_Z at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_axis_length", iter_axis_length, "Length of the magnetic axis at each iteration", "meters");
-  
+
   /*
   std::string general_option = "random";
   nc.put("general_option", general_option, "Whether this job was a single configuration vs a scan");
-  
+
   int at_least_order_r2_int = (int) q.at_least_order_r2;
   nc.put("at_least_order_r2", at_least_order_r2_int, "1 if the O(r^2) equations were solved, 0 if not", "dimensionless");
   nc.put("order_r_option", q.order_r_option, "Whether the Garren-Boozer equations were solved to 1st or 2nd order in the effective minor radius r");
@@ -119,7 +124,7 @@ void Opt::write_netcdf() {
     nc.put("B2s_min", B2s_min, "Minimum value for B2s in the scan", "1/meter");
     nc.put("B2s_max", B2s_max, "Maximum value for B2s in the scan", "1/meter");
   }
-  
+
   int n_scan_int = (int)n_scan;
   nc.put("n_scan", n_scan_int, "Number of configurations kept from the scan and saved in this file", "dimensionless");
   nc.put("attempts", filters[ATTEMPTS], "Number of configurations examined in the scan", "dimensionless");
@@ -190,7 +195,7 @@ void Opt::write_netcdf() {
   nc.put(axis_nmax_plus_1_dim, "Z0c_max", Z0c_max, "Maximum values in the scan for each cos(n*phi) Fourier amplitude of the Cartesian Z component of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_dim, "Z0s_min", Z0s_min, "Minimum values in the scan for each sin(n*phi) Fourier amplitude of the Cartesian Z component of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_dim, "Z0s_max", Z0s_max, "Maximum values in the scan for each sin(n*phi) Fourier amplitude of the Cartesian Z component of the magnetic axis", "meter");
-  
+
   nc.put(nphi_dim, "phi", q.phi, "The grid in the standard toroidal angle phi", "dimensionless");
   nc.put(n_scan_dim, "scan_eta_bar", scan_eta_bar, "For each configuration kept from the scan, the constant equal to B1c / B0", "1/meter");
   nc.put(n_scan_dim, "scan_sigma0", scan_sigma0, "For each configuration kept from the scan, the value of sigma at phi=0", "dimensionless");
@@ -223,9 +228,9 @@ void Opt::write_netcdf() {
   nc.put(axis_nmax_plus_1_n_scan_dim, "scan_Z0c", &scan_Z0c(0, 0), "For each configuration kept from the scan, the amplitudes of the cos(n*phi) components of the Cartesian Z coordinate of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_n_scan_dim, "scan_Z0s", &scan_Z0s(0, 0), "For each configuration kept from the scan, the amplitudes of the sin(n*phi) components of the Cartesian Z coordinate of the magnetic axis", "meter");
   */
-  
+
   // ND arrays for N > 1:
-  std::vector<dim_id_type> axis_nmax_plus_1_n_iter_dim {axis_nmax_plus_1_dim, n_iter_dim};
+  std::vector<dim_id_type> axis_nmax_plus_1_n_iter_dim{axis_nmax_plus_1_dim, n_iter_dim};
   nc.put(axis_nmax_plus_1_n_iter_dim, "iter_R0c", &iter_R0c(0, 0), "The amplitudes of the cos(n*phi) components of the major radius of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_n_iter_dim, "iter_R0s", &iter_R0s(0, 0), "The amplitudes of the sin(n*phi) components of the major radius of the magnetic axis", "meter");
   nc.put(axis_nmax_plus_1_n_iter_dim, "iter_Z0c", &iter_Z0c(0, 0), "The amplitudes of the cos(n*phi) components of the Cartesian Z coordinate of the magnetic axis", "meter");
@@ -233,5 +238,4 @@ void Opt::write_netcdf() {
 
   // Done defining the NetCDF data.
   nc.write_and_close();
-
 }

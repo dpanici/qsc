@@ -8,18 +8,19 @@ using namespace qsc;
 
 /** Read in a scan input file
  */
-void MultiOptScan::input(std::string filename) {
+void MultiOptScan::input(std::string filename)
+{
 
   MPI_Comm_rank(mpi_comm, &mpi_rank);
   MPI_Barrier(mpi_comm);
-  
+
   mo_ref.input(filename);
-    
+
   auto toml_file = toml::parse(filename);
   auto indata = toml::find(toml_file, "multiopt_scan");
-  
+
   std::vector<std::string> varlist;
-  
+
   toml_read(varlist, indata, "verbose", verbose);
   toml_read(varlist, indata, "quit_after_init", quit_after_init);
   toml_read(varlist, indata, "save_period", save_period);
@@ -32,9 +33,10 @@ void MultiOptScan::input(std::string filename) {
   toml_read(varlist, indata, "params_n", params_n);
   toml_read(varlist, indata, "params_stage", params_stage);
   toml_read(varlist, indata, "params_log", params_log);
-  
+
   toml_read(varlist, indata, "keep_all", keep_all);
   toml_read(varlist, indata, "min_R0_to_keep", min_R0_to_keep);
+  toml_read(varlist, indata, "max_R0_to_keep", max_R0_to_keep);
   toml_read(varlist, indata, "min_iota_to_keep", min_iota_to_keep);
   toml_read(varlist, indata, "max_elongation_to_keep", max_elongation_to_keep);
   toml_read(varlist, indata, "min_L_grad_B_to_keep", min_L_grad_B_to_keep);
@@ -51,26 +53,30 @@ void MultiOptScan::input(std::string filename) {
   toml_read(varlist, indata, "max_d_XY3_d_varphi_to_keep", max_d_XY3_d_varphi_to_keep);
 
   toml_unused(varlist, indata);
-  
-  ndim = params.size();
-  assert (params_max.size() == ndim);
-  assert (params_min.size() == ndim);
-  assert (params_n.size() == ndim);
-  assert (params_log.size() == ndim);
-  assert (params_stage.size() == ndim);
 
-  if (mpi_rank == 0) {
+  ndim = params.size();
+  assert(params_max.size() == ndim);
+  assert(params_min.size() == ndim);
+  assert(params_n.size() == ndim);
+  assert(params_log.size() == ndim);
+  assert(params_stage.size() == ndim);
+
+  if (mpi_rank == 0)
+  {
     std::cout << "----- MultiOpt Scan parameters -----" << std::endl;
     std::cout << "parameters to scan, min, max, n, log, stage: " << std::endl;
-    for (int j = 0; j < ndim; j++) {
+    for (int j = 0; j < ndim; j++)
+    {
       std::cout << " " << params[j] << ", " << params_min[j] << ", " << params_max[j];
       std::cout << ", " << params_n[j] << ", " << params_log[j] << ", " << params_stage[j] << std::endl;
     }
     std::cout << "save_period: " << save_period << std::endl;
     std::cout << "max_seconds: " << max_seconds << std::endl;
     std::cout << "keep_all: " << keep_all << std::endl;
-    if (!keep_all) {
+    if (!keep_all)
+    {
       std::cout << "min_R0_to_keep: " << min_R0_to_keep << std::endl;
+      std::cout << "max_R0_to_keep: " << max_R0_to_keep << std::endl;
       std::cout << "min_iota_to_keep: " << min_iota_to_keep << std::endl;
       std::cout << "max_elongation_to_keep: " << max_elongation_to_keep << std::endl;
       std::cout << "min_L_grad_B_to_keep: " << min_L_grad_B_to_keep << std::endl;
