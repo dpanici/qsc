@@ -188,7 +188,7 @@ void Scan::collect_results(int n_parameters,
       scan_B20_residual[j] = parameters(14, j);
       scan_standard_deviation_of_R[j] = parameters(15, j);
       scan_standard_deviation_of_Z[j] = parameters(16, j);
-      scan_min_R0[j] = parameters(17, j);
+      scan_max_R0[j] = parameters(17, j);
 
       scan_helicity[j] = int_parameters[0 + j * n_int_parameters];
 
