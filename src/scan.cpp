@@ -40,7 +40,7 @@ void Scan::defaults()
 
   keep_all = true;
   min_R0_to_keep = -1.0;
-  max_R0_to_keep = 1.0e+30;
+  min_torsion_to_keep = 0.0;
 
   min_iota_to_keep = -1.0;
   max_elongation_to_keep = 10.0;

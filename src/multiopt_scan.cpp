@@ -21,7 +21,7 @@ void MultiOptScan::defaults()
 
   keep_all = true;
   min_R0_to_keep = -1.0;
-  max_R0_to_keep = 1.0e+30;
+  min_torsion_to_keep = 0.0;
   min_iota_to_keep = -1.0;
   max_elongation_to_keep = 10.0;
   min_L_grad_B_to_keep = -1.0;
@@ -558,15 +558,15 @@ void MultiOptScan::eval_scan_index(int j_scan)
     }
     else if (verbose > 1)
       std::cout << "Passed min_R0 filter." << std::endl;
-    if (mo.opts[index].q.grid_max_R0 > max_R0_to_keep)
+    if (mo.opts[index].q.grid_min_torsion <min_torsion_to_keep)
     {
-      filters_local[REJECTED_DUE_TO_R0_MAX]++;
+      filters_local[REJECTED_DUE_TO_TORSION]++;
       if (verbose > 1)
-        std::cout << "Rejecting this configuration due to max_R0." << std::endl;
+        std::cout << "Rejecting this configuration due to min_torsion." << std::endl;
       passed_filters = false;
     }
     else if (verbose > 1)
-      std::cout << "Passed max_R0 filter." << std::endl;
+      std::cout << "Passed min_torsion filter." << std::endl;
 
     if (std::abs(mo.opts[index].q.iota) < min_iota_to_keep)
     {
@@ -852,8 +852,8 @@ void MultiOptScan::print_status()
             << " (" << filter_fractions[KEPT] << ")" << std::endl;
   std::cout << "  Rejected due to min_R0:            " << std::setw(width) << filters[REJECTED_DUE_TO_R0]
             << " (" << filter_fractions[REJECTED_DUE_TO_R0] << ")" << std::endl;
-  std::cout << "  Rejected due to max_R0:            " << std::setw(width) << filters[REJECTED_DUE_TO_R0_MAX]
-            << " (" << filter_fractions[REJECTED_DUE_TO_R0_MAX] << ")" << std::endl;
+  std::cout << "  Rejected due to min_torsion:            " << std::setw(width) << filters[REJECTED_DUE_TO_R0_MAX]
+            << " (" << filter_fractions[REJECTED_DUE_TO_TORSION] << ")" << std::endl;
   std::cout << "  Rejected due to min iota:          " << std::setw(width) << filters[REJECTED_DUE_TO_IOTA]
             << " (" << filter_fractions[REJECTED_DUE_TO_IOTA] << ")" << std::endl;
   std::cout << "  Rejected due to max elongation:    " << std::setw(width) << filters[REJECTED_DUE_TO_ELONGATION]
@@ -916,7 +916,7 @@ void MultiOptScan::filter_global_arrays()
   scan_B20_mean.resize(n_scan, 0.0);
   scan_standard_deviation_of_R.resize(n_scan, 0.0);
   scan_standard_deviation_of_Z.resize(n_scan, 0.0);
-  scan_max_R0.resize(n_scan, 0.0);
+  scan_min_torsion.resize(n_scan, 0.0);
 
   scan_max_XY2.resize(n_scan, 0.0);
   scan_max_Z2.resize(n_scan, 0.0);
@@ -997,7 +997,7 @@ void MultiOptScan::filter_global_arrays()
     scan_B20_variation[j] = parameters(14, j_global);
     scan_B20_residual[j] = parameters(15, j_global);
     scan_B20_mean[j] = parameters(16, j_global);
-    scan_max_R0[j] = parameters(17, j_global);
+    scan_min_torsion[j] = parameters(17, j_global);
     scan_standard_deviation_of_R[j] = parameters(18, j_global);
     scan_standard_deviation_of_Z[j] = parameters(19, j_global);
     scan_max_XY2[j] = parameters(20, j_global);

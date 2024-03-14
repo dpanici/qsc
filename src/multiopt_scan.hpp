@@ -54,7 +54,7 @@ namespace qsc
     qscfloat max_seconds, print_status_period, save_period;
     int n_scan, n_scan_all, filters[N_FILTERS];
     qscfloat filter_fractions[N_FILTERS];
-    qscfloat min_R0_to_keep, max_R0_to_keep, min_iota_to_keep, max_elongation_to_keep;
+    qscfloat min_R0_to_keep, min_torsion_to_keep, min_iota_to_keep, max_elongation_to_keep;
     qscfloat min_L_grad_B_to_keep, min_L_grad_grad_B_to_keep;
     qscfloat max_B20_variation_to_keep, min_r_singularity_to_keep;
     qscfloat max_d2_volume_d_psi2_to_keep, min_DMerc_times_r2_to_keep;
@@ -87,7 +87,7 @@ namespace qsc
     Vector scan_eta_bar, scan_sigma0, scan_B2s, scan_B2c;
     Matrix scan_R0c, scan_R0s, scan_Z0c, scan_Z0s;
     Matrix scan_initial_R0c, scan_initial_R0s, scan_initial_Z0c, scan_initial_Z0s;
-    Vector scan_min_R0, scan_max_R0, scan_max_curvature;
+    Vector scan_min_R0, scan_min_torsion, scan_max_curvature;
     Vector scan_iota, scan_max_elongation;
     Vector scan_min_L_grad_B, scan_min_L_grad_grad_B;
     Vector scan_r_singularity, scan_B20_variation, scan_B20_residual, scan_B20_mean;
@@ -102,7 +102,7 @@ namespace qsc
 
     Vector scan_weight_B20, scan_weight_iota, scan_target_iota;
     Vector scan_weight_elongation, scan_weight_curvature;
-    Vector scan_weight_R0, scan_target_min_R0, scan_target_max_R0;
+    Vector scan_weight_R0, scan_target_min_R0, scan_target_min_torsion;
     Vector scan_weight_d2_volume_d_psi2, scan_max_d2_volume_d_psi2;
     Vector scan_weight_DMerc_times_r2, scan_min_DMerc_times_r2;
     Vector scan_weight_XY2, scan_weight_XY2Prime, scan_weight_XY2PrimePrime;

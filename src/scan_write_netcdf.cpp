@@ -100,7 +100,7 @@ void Scan::write_netcdf()
   if (!keep_all)
   {
     nc.put("min_R0_to_keep", min_R0_to_keep, "Configurations were kept in the scan only if the major radius of the magnetic axis was at least this value", "meter");
-    nc.put("max_R0_to_keep", max_R0_to_keep, "Configurations were kept in the scan only if the major radius of the magnetic axis was at most this value", "meter");
+    nc.put("min_torsion_to_keep", min_torsion_to_keep, "Configurations were kept in the scan only if the min_torsion of the magnetic axis was at least this value", "1/meter");
     nc.put("min_iota_to_keep", min_iota_to_keep, "Configurations were kept in the scan only if the absolute value of the on-axis rotational transform was at least this value", "dimensionless");
     nc.put("max_elongation_to_keep", max_elongation_to_keep, "Configurations were kept in the scan only if the elongation (in the plane perpendicular to the magnetic axis) was no greater than this value at all toroidal angles", "dimensionless");
     nc.put("min_L_grad_B_to_keep", min_L_grad_B_to_keep, "Configurations were kept in the scan only if the scale length L_grad_B (eq (3.1) in Landreman J Plasma Physics (2021)) is at least this value at each toroidal angle", "meter");

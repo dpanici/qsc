@@ -73,7 +73,7 @@ namespace qsc {
     Vector Boozer_toroidal_angle, L_grad_B, L_grad_B_inverse;
     Vector L_grad_grad_B, L_grad_grad_B_inverse;
     int max_newton_iterations, max_linesearch_iterations;
-    qscfloat newton_tolerance, grid_min_R0,grid_max_R0, G2, I2_over_B0;
+    qscfloat newton_tolerance, grid_min_R0,grid_min_torsion, G2, I2_over_B0;
     qscfloat iota, iota_N, grid_max_curvature, grid_max_elongation, mean_elongation;
     std::string order_r_option;
     bool at_least_order_r2, order_r2p1, order_r3;

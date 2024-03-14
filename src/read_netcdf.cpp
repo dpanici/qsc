@@ -255,7 +255,7 @@ void Qsc::read_netcdf(std::string filename, char C_or_F)
     nc.get("grid_max_curvature", grid_max_curvature);
     nc.get("grid_max_elongation", grid_max_elongation);
     nc.get("grid_min_R0", grid_min_R0);
-    nc.get("grid_max_R0", grid_max_R0);
+    nc.get("grid_min_torsion", grid_min_torsion);
     nc.get("grid_min_L_grad_B", grid_min_L_grad_B);
     nc.get("mean_elongation", mean_elongation);
     nc.get("mean_R", mean_R);

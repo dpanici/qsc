@@ -41,7 +41,7 @@ Qsc::Qsc() {
   Z0s.resize(1, 0.0);
 
   grid_min_R0 = 0.0;
-  grid_max_R0 = 0.0;
+  grid_min_torsion = 0.0;
   curvature = 0.0;
   grid_max_curvature = 0.0;
   iota = 0.0;

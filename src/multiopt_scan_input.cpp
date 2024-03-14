@@ -36,7 +36,7 @@ void MultiOptScan::input(std::string filename)
 
   toml_read(varlist, indata, "keep_all", keep_all);
   toml_read(varlist, indata, "min_R0_to_keep", min_R0_to_keep);
-  toml_read(varlist, indata, "max_R0_to_keep", max_R0_to_keep);
+  toml_read(varlist, indata, "min_torsion_to_keep", min_torsion_to_keep);
   toml_read(varlist, indata, "min_iota_to_keep", min_iota_to_keep);
   toml_read(varlist, indata, "max_elongation_to_keep", max_elongation_to_keep);
   toml_read(varlist, indata, "min_L_grad_B_to_keep", min_L_grad_B_to_keep);
@@ -76,7 +76,7 @@ void MultiOptScan::input(std::string filename)
     if (!keep_all)
     {
       std::cout << "min_R0_to_keep: " << min_R0_to_keep << std::endl;
-      std::cout << "max_R0_to_keep: " << max_R0_to_keep << std::endl;
+      std::cout << "min_torsion_to_keep: " << min_torsion_to_keep << std::endl;
       std::cout << "min_iota_to_keep: " << min_iota_to_keep << std::endl;
       std::cout << "max_elongation_to_keep: " << max_elongation_to_keep << std::endl;
       std::cout << "min_L_grad_B_to_keep: " << min_L_grad_B_to_keep << std::endl;

@@ -231,7 +231,7 @@ void Opt::optimize()
       std::cout << "  Z0s: " << q.Z0s << std::endl;
       std::cout << "  iota: " << q.iota << "  r_singularity: " << q.r_singularity_robust << std::endl;
       std::cout << "  L grad B: " << q.grid_min_L_grad_B << "  L grad grad B: " << q.grid_min_L_grad_grad_B << std::endl;
-      std::cout << "  B20 variation: " << q.B20_grid_variation << "  min(R0): " << q.grid_min_R0 << "  max(R0): " << q.grid_max_R0 << std::endl;
+      std::cout << "  B20 variation: " << q.B20_grid_variation << "  min(R0): " << q.grid_min_R0 << "  max(R0): " << q.grid_min_torsion << std::endl;
       std::cout << "  d2 volume / d psi2: " << q.d2_volume_d_psi2 << std::endl;
       std::cout << "  DMerc_times_r2: " << q.DMerc_times_r2 << std::endl;
       std::cout << "  axis_length: " << q.axis_length << "  stddev(R): " << q.standard_deviation_of_R << std::endl;
@@ -1108,7 +1108,7 @@ void gsl_callback(const size_t iter, void *params,
   opt->iter_B2c[n_iter] = opt->q.B2c;
   opt->iter_B2s[n_iter] = opt->q.B2s;
   opt->iter_min_R0[n_iter] = opt->q.grid_min_R0;
-  opt->iter_max_R0[n_iter] = opt->q.grid_max_R0;
+  opt->iter_min_torsion[n_iter] = opt->q.grid_min_torsion;
   opt->iter_max_curvature[n_iter] = opt->q.grid_max_curvature;
   opt->iter_iota[n_iter] = opt->q.iota;
   opt->iter_max_elongation[n_iter] = opt->q.grid_max_elongation;

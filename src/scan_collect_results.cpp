@@ -147,7 +147,7 @@ void Scan::collect_results(int n_parameters,
     scan_B2c.resize(n_scan, 0.0);
     scan_B2s.resize(n_scan, 0.0);
     scan_min_R0.resize(n_scan, 0.0);
-    scan_max_R0.resize(n_scan, 0.0);
+    scan_min_torsion.resize(n_scan, 0.0);
     scan_max_curvature.resize(n_scan, 0.0);
     scan_iota.resize(n_scan, 0.0);
     scan_max_elongation.resize(n_scan, 0.0);
@@ -188,7 +188,7 @@ void Scan::collect_results(int n_parameters,
       scan_B20_residual[j] = parameters(14, j);
       scan_standard_deviation_of_R[j] = parameters(15, j);
       scan_standard_deviation_of_Z[j] = parameters(16, j);
-      scan_max_R0[j] = parameters(17, j);
+      scan_min_torsion[j] = parameters(17, j);
 
       scan_helicity[j] = int_parameters[0 + j * n_int_parameters];
 
@@ -219,8 +219,8 @@ void Scan::collect_results(int n_parameters,
               << " (" << filter_fractions[REJECTED_DUE_TO_R0_CRUDE] << ")" << std::endl;
     std::cout << "  Rejected due to min_R0:            " << std::setw(width) << filters[REJECTED_DUE_TO_R0]
               << " (" << filter_fractions[REJECTED_DUE_TO_R0] << ")" << std::endl;
-    std::cout << "  Rejected due to max_R0:            " << std::setw(width) << filters[REJECTED_DUE_TO_R0_MAX]
-              << " (" << filter_fractions[REJECTED_DUE_TO_R0_MAX] << ")" << std::endl;
+    std::cout << "  Rejected due to min_torsion:            " << std::setw(width) << filters[REJECTED_DUE_TO_TORSION]
+              << " (" << filter_fractions[REJECTED_DUE_TO_TORSION] << ")" << std::endl;
     std::cout << "  Rejected due to max curvature:     " << std::setw(width) << filters[REJECTED_DUE_TO_CURVATURE]
               << " (" << filter_fractions[REJECTED_DUE_TO_CURVATURE] << ")" << std::endl;
     std::cout << "  Rejected due to min iota:          " << std::setw(width) << filters[REJECTED_DUE_TO_IOTA]
@@ -281,7 +281,7 @@ void Scan::collect_results(int n_parameters,
       std::cout << std::setprecision(2) << std::endl;
       std::cout << "min_R0: " << scan_min_R0 << std::endl;
       std::cout << std::endl;
-      std::cout << "max_R0: " << scan_max_R0 << std::endl;
+      std::cout << "min_torsion: " << scan_min_torsion << std::endl;
       std::cout << std::endl;
       std::cout << "iota: " << scan_iota << std::endl;
       std::cout << std::endl;

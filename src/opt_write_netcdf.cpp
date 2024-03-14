@@ -47,7 +47,7 @@ void Opt::write_netcdf()
 
   nc.put("target_iota", target_iota, "Target iota for the iota term in the objective function for optimization", "dimensionless");
   nc.put("min_R0", min_R0, "Minimum major radius of the magnetic axis for the associated penalty term in the objective function for optimization", "dimensionless");
-  nc.put("max_R0", max_R0, "Maximum major radius of the magnetic axis for the associated penalty term in the objective function for optimization", "dimensionless");
+  nc.put("min_torsion", min_torsion, "min tosion of the magnetic axis for the associated penalty term in the objective function for optimization", "dimensionless");
 
   nc.put("target_axis_length", target_axis_length, "Target length of the magnetic axis for the iota term in the objective function for optimization", "meters");
 
@@ -80,7 +80,7 @@ void Opt::write_netcdf()
   nc.put(n_iter_dim, "iter_B2c", iter_B2c, "B2c at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_B2s", iter_B2s, "B2s at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_min_R0", iter_min_R0, "Min_R0 at each iteration", "dimensionless");
-  nc.put(n_iter_dim, "iter_max_R0", iter_max_R0, "Max_R0 at each iteration", "dimensionless");
+  nc.put(n_iter_dim, "iter_min_torsion", iter_min_torsion, "min_torsion at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_max_curvature", iter_max_curvature, "max_curvature at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_iota", iter_iota, "iota at each iteration", "dimensionless");
   nc.put(n_iter_dim, "iter_max_elongation", iter_max_elongation, "max_elongation at each iteration", "dimensionless");

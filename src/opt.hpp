@@ -52,7 +52,7 @@ namespace qsc
 
     qscfloat weight_B20, weight_iota, target_iota;
     qscfloat weight_elongation, weight_curvature;
-    qscfloat weight_R0, min_R0, max_R0;
+    qscfloat weight_R0, min_R0, min_torsion;
     qscfloat weight_d2_volume_d_psi2, max_d2_volume_d_psi2;
     qscfloat weight_DMerc_times_r2, min_DMerc_times_r2;
     qscfloat weight_XY2, weight_XY2Prime, weight_XY2PrimePrime;
@@ -86,7 +86,7 @@ namespace qsc
 
     Vector iter_eta_bar, iter_sigma0, iter_B2s, iter_B2c;
     Matrix iter_R0c, iter_R0s, iter_Z0c, iter_Z0s;
-    Vector iter_min_R0, iter_max_R0, iter_max_curvature;
+    Vector iter_min_R0, iter_min_torsion, iter_max_curvature;
     Vector iter_iota, iter_max_elongation;
     Vector iter_min_L_grad_B, iter_min_L_grad_grad_B;
     Vector iter_r_singularity, iter_B20_variation, iter_B20_residual;

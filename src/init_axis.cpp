@@ -56,7 +56,7 @@ void Qsc::init_axis()
   if (verbose > 0)
     std::cout << "G0: " << G0 << std::endl;
   grid_min_R0 = R0.min();
-  grid_max_R0 = R0.max();
+  // grid_max_R0 = R0.max();
 
   // Define some aliases:
 #define d_r_d_phi_cylindrical1 R0p
@@ -134,6 +134,7 @@ void Qsc::init_axis()
   torsion_denominator = tempvec1 * tempvec1 + tempvec2 * tempvec2 + tempvec3 * tempvec3;
 
   torsion = torsion_numerator / torsion_denominator;
+  grid_min_torsion = torsion.min();
 
   for (k = 0; k < nphi; k++)
   {

@@ -78,7 +78,7 @@ void MultiOptScan::write_netcdf()
   if (!keep_all)
   {
     nc.put("min_R0_to_keep", min_R0_to_keep, "Configurations were kept in the scan only if the major radius of the magnetic axis was at least this value", "meter");
-    nc.put("max_R0_to_keep", max_R0_to_keep, "Configurations were kept in the scan only if the major radius of the magnetic axis was at most this value", "meter");
+    nc.put("min_torsion_to_keep", min_torsion_to_keep, "Configurations were kept in the scan only if the torsion of the magnetic axis was at least this value", "1/m");
     nc.put("min_iota_to_keep", min_iota_to_keep, "Configurations were kept in the scan only if the absolute value of the on-axis rotational transform was at least this value", "dimensionless");
     nc.put("max_elongation_to_keep", max_elongation_to_keep, "Configurations were kept in the scan only if the elongation (in the plane perpendicular to the magnetic axis) was no greater than this value at all toroidal angles", "dimensionless");
     nc.put("min_L_grad_B_to_keep", min_L_grad_B_to_keep, "Configurations were kept in the scan only if the scale length L_grad_B (eq (3.1) in Landreman J Plasma Physics (2021)) is at least this value at each toroidal angle", "meter");
@@ -112,7 +112,7 @@ void MultiOptScan::write_netcdf()
   nc.put(n_scan_dim, "scan_B2s", scan_B2s, "For each configuration kept from the scan, the r^2 * sin(2*theta) term in |B|", "Tesla/(meter^2)");
   nc.put(n_scan_dim, "scan_iota", scan_iota, "For each configuration kept from the scan, the rotational transform on axis", "dimensionless");
   nc.put(n_scan_dim, "scan_min_R0", scan_min_R0, "For each configuration kept from the scan, the minimum value of R0, the major radius of the magnetic axis. This variable corresponds to grid_min_R0 in a single Qsc calculation.", "meter");
-  nc.put(n_scan_dim, "scan_max_R0", scan_max_R0, "For each configuration kept from the scan, the maximum value of R0, the major radius of the magnetic axis. This variable corresponds to grid_max_R0 in a single Qsc calculation.", "meter");
+  nc.put(n_scan_dim, "scan_min_torsion", scan_min_torsion, "For each configuration kept from the scan, the maximum value of torsion. This variable corresponds to grid_min_torsion in a single Qsc calculation.", "1/meter");
   nc.put(n_scan_dim, "scan_max_curvature", scan_max_curvature, "For each configuration kept from the scan, the maximum curvature of the magnetic axis", "1/meter");
   nc.put(n_scan_dim, "scan_max_elongation", scan_max_elongation, "For each configuration kept from the scan, the maximum along the magnetic axis of the elongation in the plane perpendicular to the axis", "dimensionless");
   nc.put(n_scan_dim, "scan_min_L_grad_B", scan_min_L_grad_B, "For each configuration kept from the scan, the minimum along the magnetic axis of the scale length L_grad_B, (eq (3.1) in Landreman J Plasma Physics (2021). This quantity corresponds to grid_min_L_grad_B for a single Qsc run.", "meter");

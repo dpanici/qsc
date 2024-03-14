@@ -21,13 +21,13 @@ elseif(DEFINED ENV{NERSC_HOST})
 elseif("$ENV{CLUSTER}" STREQUAL "DRACO")
   message("Detected host is IPP Draco")
   # CMake detects gnu compiler unless you specify Intel:
-  set(CMAKE_CXX_COMPILER "mpiicpc")
+  set(CMAKE_CXX_COMPILER "g++")
   #set(BLA_VENDOR Intel10_64ilp_seq)
 
 elseif("$ENV{CLUSTER}" STREQUAL "COBRA")
   message("Detected host is IPP Cobra")
   # CMake detects gnu compiler unless you specify Intel:
-  set(CMAKE_CXX_COMPILER "mpiicpc")
+  set(CMAKE_CXX_COMPILER "g++")
   # Compiled optimization flags recommended on the cobra website:
   # https://docs.mpcdf.mpg.de/doc/computing/software/compilers_languages.html#compiler-optimization-flags
   add_definitions(-xCORE-AVX512 -qopt-zmm-usage=high -ipo -O2)
@@ -35,7 +35,7 @@ elseif("$ENV{CLUSTER}" STREQUAL "COBRA")
 elseif("$ENV{CLUSTER}" STREQUAL "RAVEN")
   message("Detected host is IPP Raven")
   # CMake detects gnu compiler unless you specify Intel:
-  set(CMAKE_CXX_COMPILER "mpiicpc")
+  set(CMAKE_CXX_COMPILER "g++")
 
 else()
   message("This host is not one with specific rules for qsc.")

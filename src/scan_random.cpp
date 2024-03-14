@@ -165,7 +165,7 @@ void Scan::random()
       filters_local[REJECTED_DUE_TO_R0]++;
       continue;
     }
-    if (!keep_all && q.grid_max_R0 > max_R0_to_keep)
+    if (!keep_all && q.grid_min_torsion > min_torsion_to_keep)
     {
       filters_local[REJECTED_DUE_TO_R0_MAX]++;
       continue;
@@ -279,7 +279,7 @@ void Scan::random()
     parameters_local(14, j_scan) = q.B20_residual;
     parameters_local(15, j_scan) = q.standard_deviation_of_R;
     parameters_local(16, j_scan) = q.standard_deviation_of_Z;
-    parameters_local(17, j_scan) = q.grid_max_R0;
+    parameters_local(17, j_scan) = q.grid_min_torsion;
 
     int_parameters_local[0 + n_int_parameters * j_scan] = q.helicity;
 
